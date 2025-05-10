@@ -4,18 +4,13 @@ class PredictionForm(forms.Form):
     age = forms.FloatField(required=True)
     weight = forms.FloatField(required=True, label="Weight (lbs)")
     
-    sex = forms.ChoiceField(
-        choices=[('Male', 'Male'), ('Female', 'Female')],
-        required=True
-    )
-    
     breed_size = forms.ChoiceField(
         choices=[('Small', 'Small'), ('Medium', 'Medium'), ('Large', 'Large')],
         required=True
     )
     
     spay_neuter_status = forms.ChoiceField(
-        choices=[('Neutered', 'Neutered'), ('Spayed', 'Spayed'), ('None', 'None')],
+        choices=[('Neutered', 'Neutered'), ('Spayed', 'Spayed')],
         required=True
     )
     
@@ -32,9 +27,9 @@ class PredictionForm(forms.Form):
     
     diet = forms.ChoiceField(
         choices=[
-            ('Dry food', 'Dry food'),
+            ('Hard food', 'Hard food'),
             ('Wet food', 'Wet food'),
-            ('Raw diet', 'Raw diet'),
+            ('Special diet', 'Special diet'),
             ('Home cooked', 'Home cooked')
         ],
         required=True

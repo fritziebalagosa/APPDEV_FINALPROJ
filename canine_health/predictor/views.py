@@ -52,25 +52,24 @@ def predict_view(request):
         if form.is_valid():
             input_data = []
 
-            # Updated field mapping with exact feature names used during training
+            # Mapping of form fields to trained model feature names
             field_mapping = {
                 'age': 'Age',
-                'weight': 'Weight (lbs)',  # Exact feature name used during training
+                'weight': 'Weight (lbs)',
                 'spay_neuter_status': 'Spay/Neuter Status',
                 'daily_activity_level': 'Daily Activity Level',
                 'diet': 'Diet',
                 'hours_of_sleep': 'Hours of Sleep',
-                'play_time': 'Play Time (hrs)',  # Exact feature name used during training
+                'play_time': 'Play Time (hrs)',
                 'annual_vet_visits': 'Annual Vet Visits',
-                'breed_size': 'Breed Size'  # Exact feature name used during training
+                'breed_size': 'Breed Size'
             }
 
             try:
-                # Ensure that only the relevant features are passed to the model
+                # Use only the fields expected by the model
                 filtered_features = [f for f in feature_order if f in field_mapping.values()]
 
                 for trained_field in filtered_features:
-                    # Get corresponding form field key
                     form_field = next((k for k, v in field_mapping.items() if v == trained_field), None)
                     if form_field is None:
                         raise ValueError(f"No matching form field for feature '{trained_field}'.")
@@ -79,9 +78,9 @@ def predict_view(request):
                     if value is None:
                         raise ValueError(f"Missing value for: {form_field}")
 
-                    print(f"🔍 Processing '{trained_field}': '{value}'")
+                    print(f"🔍 Processing '{trained_field}' with value '{value}'")
 
-                    # Encode if necessary
+                    # Encode categorical values using encoders
                     if trained_field in encoders:
                         value = encoders[trained_field].transform([str(value)])[0]
                         print(f"✅ Encoded '{trained_field}' -> {value}")
@@ -91,15 +90,15 @@ def predict_view(request):
 
                     input_data.append(value)
 
-                # Build prediction DataFrame
                 input_df = pd.DataFrame([input_data], columns=filtered_features)
                 prediction = model.predict(input_df)[0]
-                
-                # Map the prediction to a friendly message
+
+                # Interpret prediction manually (0 or 1)
                 if prediction == 1:
-                    result = "Your dog is healthy!"  # Healthy
+                    result = "Your dog is healthy!"
+                    
                 else:
-                    result = "Your dog is not healthy."  # Unhealthy
+                            result = "Your dog is not healthy."
 
             except Exception as e:
                 result = f"Prediction error: {e}"
@@ -108,8 +107,6 @@ def predict_view(request):
         form = PredictionForm()
 
     return render(request, 'predictor/predict.html', {'form': form, 'result': result})
-
-
 
 
 @login_required
