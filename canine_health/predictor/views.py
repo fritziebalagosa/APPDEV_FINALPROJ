@@ -83,10 +83,10 @@ def predict_view(request):
                     # Encode categorical values using encoders
                     if trained_field in encoders:
                         value = encoders[trained_field].transform([str(value)])[0]
-                        print(f"✅ Encoded '{trained_field}' -> {value}")
+                        print(f" Encoded '{trained_field}' -> {value}")
                     else:
                         value = float(value)
-                        print(f"🔢 Converted '{trained_field}' to float: {value}")
+                        print(f" Converted '{trained_field}' to float: {value}")
 
                     input_data.append(value)
 
